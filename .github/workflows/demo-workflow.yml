@@ -1,0 +1,38 @@
+name: Demo Workflow
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+        inputs:
+            customer:
+                description: "Customer symbol"
+                required: true
+                default: "A_CORP"
+                type: choice
+                options: [A_CORP, A_BANK, A_WAREHOUSE]
+            operator_name:
+                description: "Your name"
+                required: false
+                type: string
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - name: Go sleep for 10 seconds
+              run: |
+                  echo "Going sleep..."
+                  sleep 10
+                  echo "Now, I am ready to work ;)"
+            - name: Test input
+              run: |
+                  echo "The customer is: $CUSTOMER"
+                  echo "The operator is: $OPERATOR"
+              env:
+                  CUSTOMER: ${{ inputs.customer }}
+                  OPERATOR: ${{ inputs.operator_name }}
